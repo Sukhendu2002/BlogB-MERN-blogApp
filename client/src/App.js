@@ -7,6 +7,7 @@ import Home from "./screens/Home";
 import Blogs from "./screens/Blogs";
 import PrivateRoute from "./routing/PrivateRoute";
 import MyBlogs from "./screens/MyBlogs";
+import MyWritenBlogs from "./screens/MyWritenBlogs";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Routes>
           <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<MyBlogs />} />
+            <Route path="/myblogs" element={<MyWritenBlogs />} />
           </Route>
           <Route path="/" element={<Home />} />
           <Route path="/blogs" element={<Blogs />} />

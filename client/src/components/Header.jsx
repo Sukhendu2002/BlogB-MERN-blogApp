@@ -58,6 +58,15 @@ const Header = () => {
                 Add Blog
               </Link>
             </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to="/myblogs"
+              >
+                My Blogs
+              </Link>
+            </li>
           </ul>
           {login ? (
             <button

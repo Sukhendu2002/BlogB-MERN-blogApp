@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -14,6 +16,19 @@ const Register = () => {
       navigate("/dashboard");
     }
   }, []);
+
+  const notify = (message, type) => {
+    toast(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      type: type,
+    });
+  };
 
   const registerHandler = async (e) => {
     e.preventDefault();
@@ -36,12 +51,9 @@ const Register = () => {
       );
       localStorage.setItem("authToken", res.data.token);
       navigate("/dashboard");
-      console.log(res.data);
     } catch (err) {
-      console.log(err);
-      setTimeout(() => {
-        alert("Some thing went wrong");
-      }, 3000);
+      notify(err.response.data.error, "error");
+      setLoading(false);
     }
     setLoading(false);
   };
@@ -98,6 +110,7 @@ const Register = () => {
               Submit
             </button>
           </form>
+          <ToastContainer />
         </div>
       )}
     </>

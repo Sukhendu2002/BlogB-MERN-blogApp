@@ -5,10 +5,33 @@ const ErrorResponse = require("../utils/errorResponse");
 exports.signup = async (req, res, next) => {
   const { userName, email, password } = req.body;
   try {
+    // Check if user already exists
+    const isalready = await User.findOne({ email });
+    if (isalready) {
+      return res.status(400).json({
+        error: "User already exists",
+      });
+    }
+    //check if userName is already taken
+    const isalreadyUserName = await User.findOne({ userName });
+    if (isalreadyUserName) {
+      return res.status(400).json({
+        error: "UserName already exists",
+      });
+    }
+    //check the length of the password
+    if (password.length < 6) {
+      return res.status(400).json({
+        error: "Password must be at least 6 characters",
+      });
+    }
     const user = await User.create({ userName, email, password });
     sendTokenResponse(user, 201, res);
   } catch (err) {
-    next(err);
+    res.status(500).json({
+      error: "Error signing up user",
+      err,
+    });
   }
 };
 
@@ -32,7 +55,7 @@ exports.login = async (req, res, next) => {
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({
-        message: "Incorrect password",
+        message: "Incorrect email or password",
       });
     }
     sendTokenResponse(user, 200, res);

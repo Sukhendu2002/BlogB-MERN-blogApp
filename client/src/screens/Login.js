@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./login.css";
+//React Toastify
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,6 +16,19 @@ const Login = () => {
       navigate("/dashboard");
     }
   }, []);
+
+  const notify = (message, type) => {
+    toast(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      type: type,
+    });
+  };
 
   const loginHandler = async (e) => {
     e.preventDefault();
@@ -30,13 +47,11 @@ const Login = () => {
         },
         config
       );
+
       localStorage.setItem("authToken", res.data.token);
       navigate("/dashboard");
     } catch (err) {
-      console.log(err);
-      setTimeout(() => {
-        alert("Some thing went wrong");
-      }, 3000);
+      notify(err.response.data.message, "error");
     }
   };
   return (
@@ -72,6 +87,7 @@ const Login = () => {
           Submit
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 };
