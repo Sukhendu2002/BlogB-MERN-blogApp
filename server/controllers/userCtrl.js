@@ -54,7 +54,6 @@ exports.resetPassword = async (req, res, next) => {
   res.send("signup");
 };
 
-
 // Send token response
 const sendTokenResponse = (user, statusCode, res) => {
   const token = user.getSignedJwtToken();
