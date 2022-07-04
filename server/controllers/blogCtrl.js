@@ -20,6 +20,7 @@ exports.createBlog = async (req, res, next) => {
     body,
     image,
     createdBy: req.user._id,
+    createdByName: req.user.userName,
   });
   try {
     const newBlog = await blog.save();
@@ -81,6 +82,20 @@ exports.getUserBlogs = async (req, res, next) => {
     const blogs = await Blog.find({ createdBy: req.user._id });
     res.status(200).json({
       blogs,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+//get a particular blog by id
+exports.getBlog = async (req, res, next) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    res.status(200).json({
+      blog,
     });
   } catch (err) {
     res.status(500).json({

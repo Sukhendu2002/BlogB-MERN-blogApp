@@ -1,7 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Card from "../components/Card";
+import MyBlogCard from "../components/MyBlogCard";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MyWritenBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -16,7 +18,7 @@ const MyWritenBlogs = () => {
       axios
         .get("/api/blog/userblogs", config)
         .then((res) => {
-          setBlogs(res.data.blogs);
+          setBlogs(res.data.blogs.reverse());
           console.log(res.data.blogs);
         })
         .catch((err) => {
@@ -26,19 +28,63 @@ const MyWritenBlogs = () => {
       console.log(error);
     }
   }, []);
+
+  const notify = (message, type) => {
+    toast(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      type: type,
+    });
+  };
+
+  const handelDelete = async (id) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      };
+
+      await axios
+        .delete(`/api/blog/deleteblog/${id}`, config)
+        .then((res) => {
+          notify(res.data.message, "success");
+          setBlogs(blogs.filter((blog) => blog._id !== id));
+        })
+        .catch((err) => {
+          notify(err.response.data.message, "error");
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="container mt-3">
-      <h2 className="title">My Blogs</h2>
-      <div className="row">
-        {blogs.map((blog) => {
-          return <Card key={blog._id} 
-            title={blog.title}
-            des={blog.body}
-            imgs={blog.image}
-          />;
-        })}
+    <section id="gallery">
+      <div class="container mt-3">
+        <div class="row">
+          {blogs.map((blog) => {
+            return (
+              <MyBlogCard
+                key={blog._id}
+                id={blog._id}
+                title={blog.title}
+                imgs={blog.image}
+                des={blog.body}
+                handleDelete={handelDelete}
+              />
+            );
+          })}
+        </div>
       </div>
-    </div>
+      <ToastContainer />
+    </section>
   );
 };
 

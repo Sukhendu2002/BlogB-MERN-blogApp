@@ -29,6 +29,8 @@ const Blogs = () => {
             title={blog.title}
             imgs={blog.image}
             des={blog.body}
+            id={blog._id}
+            author={blog.createdByName}
           />
         ))}
       </div>

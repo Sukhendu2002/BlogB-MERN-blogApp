@@ -8,6 +8,7 @@ import Blogs from "./screens/Blogs";
 import PrivateRoute from "./routing/PrivateRoute";
 import MyBlogs from "./screens/MyBlogs";
 import MyWritenBlogs from "./screens/MyWritenBlogs";
+import Blog from "./screens/Blog";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/blog/:id" element={<Blog />} />
         </Routes>
       </BrowserRouter>
     </div>

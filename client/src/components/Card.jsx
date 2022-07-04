@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Card = ({ title, imgs, des }) => {
+const Card = ({ id, title, imgs, des, author }) => {
   return (
     <div
       className="card m-2"
@@ -12,7 +12,9 @@ const Card = ({ title, imgs, des }) => {
       <img className="card-img-top" src={imgs} alt="Card image cap"></img>
       <div className="card-body">
         <h5 className="card-title">{title}</h5>
-        <Link to="/" className="btn btn-primary">
+        <p className="card-text">{des.substring(0, 50)}...</p>
+        <p className="card-text">{author}</p>
+        <Link to={`/blog/${id}`} className="btn btn-primary">
           Read More
         </Link>
       </div>
