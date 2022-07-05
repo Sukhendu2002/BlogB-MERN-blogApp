@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+
 const Blog = () => {
   //get the id from the url
   const id = window.location.pathname.split("/")[2];
@@ -45,13 +46,15 @@ const Blog = () => {
               borderRadius: "5px",
             }}
           />
-          <p
+          {/* <p
             style={{
               width: "70%",
             }}
           >
             {blog.body}
-          </p>
+          </p> */}
+          {/* //parse the html from blog.body */}
+          <div dangerouslySetInnerHTML={{ __html: blog.body }} />
         </div>
       )}
     </div>

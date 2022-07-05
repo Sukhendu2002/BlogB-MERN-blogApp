@@ -1,42 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import RichTextEditor from "../components/RichTextEditor";
-const MyBlogs = () => {
+
+const EditBlog = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [image, setImage] = useState("");
+  //get the id from the url
+  const id = window.location.pathname.split("/")[2];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-      },
-    };
-    try {
-      axios
-        .post("/api/blog/postblog", { title, body, image }, config)
-        .then((res) => {
-          setTitle("");
-          setBody("");
-          setImage("");
-          console.log(res);
-          //rerender the rich text editor
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  useEffect(() => {
+    axios
+      .get(`/api/blog/${id}`)
+      .then((res) => {
+        setTitle(res.data.blog.title);
+        setBody(res.data.blog.body);
+        setImage(res.data.blog.image);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className="container mt-3">
       <h2 className="title">Write A Post</h2>
       <form
-        onSubmit={handleSubmit}
+        // onSubmit={handleSubmit}
         style={{
           display: "block",
         }}
@@ -82,4 +72,4 @@ const MyBlogs = () => {
   );
 };
 
-export default MyBlogs;
+export default EditBlog;

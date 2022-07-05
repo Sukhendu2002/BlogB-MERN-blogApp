@@ -11,11 +11,11 @@ const MyBlogCard = ({ id, title, imgs, des, handleDelete }) => {
         <img src={imgs} alt="" class="card-img-top"></img>
         <div class="card-body">
           <h5 class="card-title">{title}</h5>
-          <p class="card-text">{des.substring(0, 100)}</p>
+          {/* <p class="card-text">{des.substring(0, 100)}</p> */}
           <Link to={`/blog/${id}`} className="links">
             <GrView />
           </Link>
-          <Link to={`/blog/${title}`} className="links">
+          <Link to={`/edit/${id}`} className="links">
             <AiFillEdit />
           </Link>
           <a onClick={() => handleDelete(id)} className="links">

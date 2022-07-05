@@ -12,7 +12,10 @@ const Card = ({ id, title, imgs, des, author }) => {
       <img className="card-img-top" src={imgs} alt="Card image cap"></img>
       <div className="card-body">
         <h5 className="card-title">{title}</h5>
-        <p className="card-text">{des.substring(0, 50)}...</p>
+
+        {/* <p className="card-text">
+          {des.substring(0, 50)}...
+        </p> */}
         <p className="card-text">{author}</p>
         <Link to={`/blog/${id}`} className="btn btn-primary">
           Read More
