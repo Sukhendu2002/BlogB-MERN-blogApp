@@ -4,12 +4,14 @@ import RichTextEditor from "../components/RichTextEditor";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../components/Loader";
 
 const EditBlog = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [image, setImage] = useState("");
+  const [loading, setLoading] = useState(true);
   //get the id from the url
   const id = window.location.pathname.split("/")[2];
 
@@ -20,9 +22,11 @@ const EditBlog = () => {
         setTitle(res.data.blog.title);
         setBody(res.data.blog.body);
         setImage(res.data.blog.image);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
   }, []);
 
@@ -40,6 +44,7 @@ const EditBlog = () => {
   };
 
   const handleUpdate = (e) => {
+    setLoading(true);
     e.preventDefault();
     const config = {
       headers: {
@@ -54,40 +59,48 @@ const EditBlog = () => {
           console.log(res);
           notify(res.data.message, "success");
           //wait for the toast to disappear
+          setLoading(false);
           setTimeout(() => {
             navigate("/myblogs");
           }, 2000);
         })
         .catch((err) => {
           console.log(err);
+          setLoading(false);
+          notify(err.response.data.message, "error");
         });
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
 
   return (
-    <div className="container mt-3">
-      <h2 className="title">Write A Post</h2>
-      <form
-        onSubmit={handleUpdate}
-        style={{
-          display: "block",
-        }}
-      >
-        <div className="form-group">
-          <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            className="form-control"
-            id="title"
-            placeholder="Enter title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="container mt-3">
+          <h2 className="title">Write A Post</h2>
+          <form
+            onSubmit={handleUpdate}
+            style={{
+              display: "block",
+            }}
+          >
+            <div className="form-group">
+              <label htmlFor="title">Title</label>
+              <input
+                type="text"
+                className="form-control"
+                id="title"
+                placeholder="Enter title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
 
-          <label htmlFor="body">Body</label>
-          {/* <textarea
+              <label htmlFor="body">Body</label>
+              {/* <textarea
             className="form-control"
             id="body"
             rows="3"
@@ -95,25 +108,27 @@ const EditBlog = () => {
             value={body}
             onChange={(e) => setBody(e.target.value)}
           ></textarea> */}
-          <RichTextEditor value={body} onChange={(c) => setBody(c)} />
+              <RichTextEditor value={body} onChange={(c) => setBody(c)} />
 
-          <label htmlFor="image">Image</label>
-          <input
-            type="text"
-            className="form-control"
-            id="image"
-            placeholder="Enter image link"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-          />
+              <label htmlFor="image">Image</label>
+              <input
+                type="text"
+                className="form-control"
+                id="image"
+                placeholder="Enter image link"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              />
 
-          <button type="submit" className="btn btn-primary mt-2">
-            Update
-          </button>
+              <button type="submit" className="btn btn-primary mt-2">
+                Update
+              </button>
+            </div>
+          </form>
+          <ToastContainer />
         </div>
-      </form>
-      <ToastContainer />
-    </div>
+      )}
+    </>
   );
 };
 

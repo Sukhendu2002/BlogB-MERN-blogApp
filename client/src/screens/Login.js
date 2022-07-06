@@ -5,10 +5,12 @@ import "./login.css";
 //React Toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../components/Loader";
 
-const Login = ({setLoggedIn}) => {
+const Login = ({ setLoggedIn }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -32,6 +34,7 @@ const Login = ({setLoggedIn}) => {
 
   const loginHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const config = {
       header: {
         "Content-Type": "application/json",
@@ -50,46 +53,54 @@ const Login = ({setLoggedIn}) => {
 
       localStorage.setItem("authToken", res.data.token);
       setLoggedIn(true);
+      setLoading(false);
       navigate("/dashboard");
     } catch (err) {
+      setLoading(false);
       notify(err.response.data.message, "error");
     }
   };
   return (
-    <div className="container">
-      <h1>Login</h1>
-      <form className="mt-5" onSubmit={loginHandler}>
-        <div className="mb-3">
-          <label className="form-label">Email address</label>
-          <input
-            type="email"
-            className="form-control"
-            placeholder="email"
-            id="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          ></input>
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder="password"
-            id="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></input>
-        </div>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="container">
+          <h1>Login</h1>
+          <form className="mt-5" onSubmit={loginHandler}>
+            <div className="mb-3">
+              <label className="form-label">Email address</label>
+              <input
+                type="email"
+                className="form-control"
+                placeholder="email"
+                id="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              ></input>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                className="form-control"
+                placeholder="password"
+                id="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              ></input>
+            </div>
 
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </form>
-      <ToastContainer />
-    </div>
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </form>
+          <ToastContainer />
+        </div>
+      )}
+    </>
   );
 };
 

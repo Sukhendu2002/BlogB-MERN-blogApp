@@ -4,6 +4,7 @@ import { BiUserCircle } from "react-icons/bi";
 import { MdDateRange } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../components/Loader";
 
 const Blog = () => {
   //get the id from the url
@@ -87,7 +88,7 @@ const Blog = () => {
   return (
     <div>
       {loading ? (
-        <div>Loading...</div>
+        <Loader />
       ) : (
         <div className="container mt-3">
           <h1>{blog.title}</h1>

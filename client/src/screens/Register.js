@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../components/Loader";
 
-const Register = ({setLoggedIn}) => {
+const Register = ({ setLoggedIn }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
@@ -51,6 +52,7 @@ const Register = ({setLoggedIn}) => {
       );
       localStorage.setItem("authToken", res.data.token);
       setLoggedIn(true);
+      setLoading(false);
       navigate("/dashboard");
     } catch (err) {
       notify(err.response.data.error, "error");
@@ -61,7 +63,7 @@ const Register = ({setLoggedIn}) => {
   return (
     <>
       {loading ? (
-        <div className="loader"> Loading</div>
+        <Loader />
       ) : (
         <div className="container">
           <h1>Login</h1>

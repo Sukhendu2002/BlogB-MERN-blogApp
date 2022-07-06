@@ -4,9 +4,11 @@ import axios from "axios";
 import MyBlogCard from "../components/MyBlogCard";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../components/Loader";
 
 const MyWritenBlogs = () => {
   const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const config = {
       headers: {
@@ -19,13 +21,16 @@ const MyWritenBlogs = () => {
         .get("/api/blog/userblogs", config)
         .then((res) => {
           setBlogs(res.data.blogs.reverse());
+          setLoading(false);
           console.log(res.data.blogs);
         })
         .catch((err) => {
           console.log(err);
+          setLoading(false);
         });
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   }, []);
 
@@ -66,25 +71,29 @@ const MyWritenBlogs = () => {
   };
 
   return (
-    <section id="gallery">
-      <div class="container mt-3">
-        <div class="row">
-          {blogs.map((blog) => {
-            return (
-              <MyBlogCard
-                key={blog._id}
-                id={blog._id}
-                title={blog.title}
-                imgs={blog.image}
-                des={blog.body}
-                handleDelete={handelDelete}
-              />
-            );
-          })}
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div class="container mt-3">
+          <div class="row">
+            {blogs.map((blog) => {
+              return (
+                <MyBlogCard
+                  key={blog._id}
+                  id={blog._id}
+                  title={blog.title}
+                  imgs={blog.image}
+                  des={blog.body}
+                  handleDelete={handelDelete}
+                />
+              );
+            })}
+          </div>
+          <ToastContainer />
         </div>
-      </div>
-      <ToastContainer />
-    </section>
+      )}
+    </>
   );
 };
 
