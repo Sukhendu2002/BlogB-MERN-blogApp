@@ -8,7 +8,8 @@ const {
   deleteBlog,
   getUserBlogs,
   getBlog,
-  updateBlog
+  updateBlog,
+  addComment
 } = require("../controllers/blogCtrl");
 
 router.route("/blogs").get(getBlogs);
@@ -22,5 +23,7 @@ router.route("/userblogs").get(protect, getUserBlogs);
 router.route("/:id").get(getBlog);
 
 router.route("/updateblog/:id").put(protect, updateBlog);
+
+router.route("/addcomment/:id").post(protect, addComment);
 
 module.exports = router;

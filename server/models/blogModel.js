@@ -29,6 +29,21 @@ const blogSchema = new mongoose.Schema({
     required: [true, "Please enter an image"],
     minlength: [3, "Image must be at least 3 characters"],
   },
+  comments: [
+    {
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+      name: {
+        type: String,
+        ref: "User",
+      },
+      comment: {
+        type: String,
+      },
+    },
+  ],
 });
 
 const Blog = mongoose.model("Blog", blogSchema);

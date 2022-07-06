@@ -104,3 +104,35 @@ exports.getBlog = async (req, res, next) => {
     });
   }
 };
+
+//add a comment to a blog
+exports.addComment = async (req, res, next) => {
+  const { comment } = req.body;
+  const blog = await Blog.findById(req.params.id);
+  if (comment === "") {
+    return res.status(400).json({
+      message: "Comment cannot be empty",
+    });
+  }
+  if (!blog) {
+    return res.status(404).json({
+      message: "Blog not found",
+    });
+  }
+  blog.comments.push({
+    id: req.user._id,
+    name: req.user.userName,
+    comment,
+  });
+  try {
+    const updatedBlog = await blog.save();
+    res.status(200).json({
+      message: "Comment added",
+      comments: updatedBlog.comments,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
