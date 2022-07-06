@@ -2,13 +2,14 @@ import Card from "../components/Card";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
+import server from "../config/index";
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     axios
-      .get("/api/blog/blogs")
+      .get(`${server}/api/blog/blogs`)
       .then((res) => {
         setBlogs(res.data.blogs.reverse());
         setLoading(false);

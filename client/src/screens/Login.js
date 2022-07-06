@@ -6,6 +6,7 @@ import "./login.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../components/Loader";
+import server from "../config/index";
 
 const Login = ({ setLoggedIn }) => {
   const [email, setEmail] = useState("");
@@ -43,7 +44,7 @@ const Login = ({ setLoggedIn }) => {
 
     try {
       const res = await axios.post(
-        "/api/auth/login",
+        `${server}/api/auth/login`,
         {
           email,
           password,

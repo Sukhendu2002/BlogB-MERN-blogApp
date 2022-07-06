@@ -3,6 +3,8 @@ import axios from "axios";
 import RichTextEditor from "../components/RichTextEditor";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import server from "../config/index";
+
 const MyBlogs = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -36,7 +38,7 @@ const MyBlogs = () => {
 
     try {
       axios
-        .post("/api/blog/postblog", { title, body, image }, config)
+        .post(`${server}/api/blog/postblog`, { title, body, image }, config)
         .then((res) => {
           setTitle("");
           setBody("");

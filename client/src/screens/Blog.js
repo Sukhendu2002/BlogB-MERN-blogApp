@@ -5,6 +5,7 @@ import { MdDateRange } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../components/Loader";
+import server from "../config/index";
 
 const Blog = () => {
   //get the id from the url
@@ -31,7 +32,7 @@ const Blog = () => {
   useEffect(() => {
     try {
       axios
-        .get(`/api/blog/${id}`)
+        .get(`${server}/api/blog/${id}`)
         .then((res) => {
           setBlog(res.data.blog);
           setLoading(false);
@@ -66,7 +67,7 @@ const Blog = () => {
     };
     try {
       axios
-        .post(`/api/blog/addcomment/${id}`, { comment }, config)
+        .post(`${server}/api/blog/addcomment/${id}`, { comment }, config)
         .then((res) => {
           setComments(res.data.comments.reverse());
           setComment("");

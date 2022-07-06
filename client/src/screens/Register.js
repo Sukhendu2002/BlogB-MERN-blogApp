@@ -4,6 +4,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../components/Loader";
+import server from "../config/index";
 
 const Register = ({ setLoggedIn }) => {
   const [email, setEmail] = useState("");
@@ -42,7 +43,7 @@ const Register = ({ setLoggedIn }) => {
     };
     try {
       const res = await axios.post(
-        "/api/auth/signup",
+        `${server}/api/auth/signup`,
         {
           userName,
           email,

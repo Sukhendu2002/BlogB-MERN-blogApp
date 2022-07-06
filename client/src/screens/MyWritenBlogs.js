@@ -5,6 +5,7 @@ import MyBlogCard from "../components/MyBlogCard";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../components/Loader";
+import server from "../config/index";
 
 const MyWritenBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -18,7 +19,7 @@ const MyWritenBlogs = () => {
     };
     try {
       axios
-        .get("/api/blog/userblogs", config)
+        .get(`${server}/api/blog/userblogs`, config)
         .then((res) => {
           setBlogs(res.data.blogs.reverse());
           setLoading(false);
@@ -57,7 +58,7 @@ const MyWritenBlogs = () => {
       };
 
       await axios
-        .delete(`/api/blog/deleteblog/${id}`, config)
+        .delete(`${server}/api/blog/deleteblog/${id}`, config)
         .then((res) => {
           notify(res.data.message, "success");
           setBlogs(blogs.filter((blog) => blog._id !== id));

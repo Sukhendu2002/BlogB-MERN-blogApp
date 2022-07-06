@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../components/Loader";
+import server from "../config/index";
 
 const EditBlog = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const EditBlog = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/blog/${id}`)
+      .get(`${server}/api/blog/${id}`)
       .then((res) => {
         setTitle(res.data.blog.title);
         setBody(res.data.blog.body);
@@ -54,7 +55,7 @@ const EditBlog = () => {
     };
     try {
       axios
-        .put(`/api/blog/updateblog/${id}`, { title, body, image }, config)
+        .put(`${server}/api/blog/updateblog/${id}`, { title, body, image }, config)
         .then((res) => {
           console.log(res);
           notify(res.data.message, "success");
