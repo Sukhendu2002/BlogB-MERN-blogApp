@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { BiUserCircle } from "react-icons/bi";
 
 const Card = ({ id, title, imgs, des, author }) => {
   return (
@@ -16,7 +17,9 @@ const Card = ({ id, title, imgs, des, author }) => {
         {/* <p className="card-text">
           {des.substring(0, 50)}...
         </p> */}
-        <p className="card-text">{author}</p>
+        <p className="card-text">
+          <BiUserCircle /> {" " + author}
+        </p>
         <Link to={`/blog/${id}`} className="btn btn-primary">
           Read More
         </Link>

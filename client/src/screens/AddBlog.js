@@ -1,10 +1,25 @@
 import React, { useState } from "react";
 import axios from "axios";
 import RichTextEditor from "../components/RichTextEditor";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const MyBlogs = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [image, setImage] = useState("");
+
+  const notify = (message, type) => {
+    toast(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      type: type,
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,6 +29,11 @@ const MyBlogs = () => {
         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       },
     };
+    //if any of the fields are empty, notify the user
+    if (title === "" || body === "" || image === "") {
+      notify("Please fill in all the fields", "error");
+    }
+
     try {
       axios
         .post("/api/blog/postblog", { title, body, image }, config)
@@ -21,8 +41,7 @@ const MyBlogs = () => {
           setTitle("");
           setBody("");
           setImage("");
-          console.log(res);
-          //rerender the rich text editor
+          notify("Your blog has been posted successfully", "success");
         })
         .catch((err) => {
           console.log(err);
@@ -45,11 +64,21 @@ const MyBlogs = () => {
           <label htmlFor="title">Title</label>
           <input
             type="text"
-            className="form-control"
+            className="form-control mb-2"
             id="title"
             placeholder="Enter title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+          />
+
+          <label htmlFor="image">Thumbnail Image Link</label>
+          <input
+            type="text"
+            className="form-control"
+            id="image"
+            placeholder="Enter image link"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
           />
 
           <label htmlFor="body">Body</label>
@@ -63,21 +92,12 @@ const MyBlogs = () => {
           ></textarea> */}
           <RichTextEditor value={body} onChange={(c) => setBody(c)} />
 
-          <label htmlFor="image">Image</label>
-          <input
-            type="text"
-            className="form-control"
-            id="image"
-            placeholder="Enter image link"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-          />
-
           <button type="submit" className="btn btn-primary mt-2">
             Submit
           </button>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 };

@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./header.css";
-const Header = () => {
+const Header = ({isLoggedIn,setLoggedIn}) => {
   const [login, setLogin] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
       setLogin(true);
     }
-  }, [localStorage.getItem("authToken")]);
+  }, []);
+
   return (
     <nav className="navbar navbar-expand-lg bg-light ">
       <div className="container-fluid container">
@@ -68,11 +72,13 @@ const Header = () => {
               </Link>
             </li>
           </ul>
-          {login ? (
+          {isLoggedIn ? (
             <button
               onClick={() => {
                 localStorage.removeItem("authToken");
-                setLogin(false);
+                navigate("/");
+                // setLogin(false);
+                setLoggedIn(false);
               }}
               to="/login"
               className="btn btn-dark button"

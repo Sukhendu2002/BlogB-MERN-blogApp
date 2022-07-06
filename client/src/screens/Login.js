@@ -6,7 +6,7 @@ import "./login.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Login = () => {
+const Login = ({setLoggedIn}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -49,6 +49,7 @@ const Login = () => {
       );
 
       localStorage.setItem("authToken", res.data.token);
+      setLoggedIn(true);
       navigate("/dashboard");
     } catch (err) {
       notify(err.response.data.message, "error");

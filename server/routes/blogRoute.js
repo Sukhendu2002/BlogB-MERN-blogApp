@@ -8,6 +8,7 @@ const {
   deleteBlog,
   getUserBlogs,
   getBlog,
+  updateBlog
 } = require("../controllers/blogCtrl");
 
 router.route("/blogs").get(getBlogs);
@@ -19,5 +20,7 @@ router.route("/deleteblog/:id").delete(protect, deleteBlog);
 router.route("/userblogs").get(protect, getUserBlogs);
 
 router.route("/:id").get(getBlog);
+
+router.route("/updateblog/:id").put(protect, updateBlog);
 
 module.exports = router;

@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import RichTextEditor from "../components/RichTextEditor";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EditBlog = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [image, setImage] = useState("");
@@ -22,11 +26,51 @@ const EditBlog = () => {
       });
   }, []);
 
+  const notify = (message, type) => {
+    toast(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      type: type,
+    });
+  };
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+    try {
+      axios
+        .put(`/api/blog/updateblog/${id}`, { title, body, image }, config)
+        .then((res) => {
+          console.log(res);
+          notify(res.data.message, "success");
+          //wait for the toast to disappear
+          setTimeout(() => {
+            navigate("/myblogs");
+          }, 2000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="container mt-3">
       <h2 className="title">Write A Post</h2>
       <form
-        // onSubmit={handleSubmit}
+        onSubmit={handleUpdate}
         style={{
           display: "block",
         }}
@@ -64,10 +108,11 @@ const EditBlog = () => {
           />
 
           <button type="submit" className="btn btn-primary mt-2">
-            Submit
+            Update
           </button>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 };

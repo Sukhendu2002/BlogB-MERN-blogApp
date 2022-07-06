@@ -4,7 +4,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Register = () => {
+const Register = ({setLoggedIn}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
@@ -50,6 +50,7 @@ const Register = () => {
         config
       );
       localStorage.setItem("authToken", res.data.token);
+      setLoggedIn(true);
       navigate("/dashboard");
     } catch (err) {
       notify(err.response.data.error, "error");

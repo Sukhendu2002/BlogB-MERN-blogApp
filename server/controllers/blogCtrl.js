@@ -48,6 +48,7 @@ exports.updateBlog = async (req, res, next) => {
   try {
     const updatedBlog = await blog.save();
     res.status(200).json({
+      message: "Blog updated Successfully",
       updatedBlog,
     });
   } catch (err) {

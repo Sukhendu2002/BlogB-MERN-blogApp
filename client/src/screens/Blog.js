@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import { BiUserCircle } from "react-icons/bi";
+import { MdDateRange } from "react-icons/md";
 
 const Blog = () => {
   //get the id from the url
@@ -36,6 +37,19 @@ const Blog = () => {
       ) : (
         <div className="container mt-3">
           <h1>{blog.title}</h1>
+          {/* <span>{blog.createdByName}</span>
+          <span>{blog.createdAt}</span> */}
+          <h6>
+            <BiUserCircle /> {blog.createdByName}
+          </h6>
+          <h6>
+            <MdDateRange />{" "}
+            {new Date(blog.createdAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </h6>
           <img
             src={blog.image}
             alt={blog.title}
