@@ -1,5 +1,11 @@
 const User = require("../models/userModel");
 const ErrorResponse = require("../utils/errorResponse");
+const { OAuth2Client } = require("google-auth-library");
+
+const client = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET
+);
 
 // Signup a new user
 exports.signup = async (req, res, next) => {
@@ -84,4 +90,65 @@ const sendTokenResponse = (user, statusCode, res) => {
     success: true,
     token,
   });
+};
+
+exports.googleLogin = async (req, res, next) => {
+  const { idToken } = req.body;
+  try {
+    client
+      .verifyIdToken({
+        idToken,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      })
+      .then(async (ticket) => {
+        const {
+          payload: { sub, name, email },
+        } = ticket;
+        const user = await User.findOne({ email });
+        if (!user) {
+          const hashedPassword = await bcryptjs.hash(sub, 12);
+          const firstName = name.split(" ")[0];
+          const lastName = name.split(" ")[1];
+          const newUser = new User({
+            userName: firstName + lastName,
+            email,
+            password: hashedPassword,
+          });
+          await newUser.save();
+          const token = newUser.getSignedJwtToken();
+          res.status(200).json({
+            success: true,
+            message: "User logged in",
+            token,
+            newUser: {
+              ...newUser._doc,
+              password: null,
+            },
+          });
+        } else {
+          const token = user.getSignedJwtToken();
+          await user.save();
+          res.status(200).json({
+            success: true,
+            message: "User logged in",
+            token,
+            user: {
+              ...user._doc,
+              password: null,
+            },
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: err,
+        });
+      });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
 };
